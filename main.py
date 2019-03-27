@@ -8,7 +8,8 @@ from subprocess import check_call
 import os
 
 #Import local functions
-from slack_functions import doTestAuth, getUserMap, getChannels, upload_reports, mkdir
+from slack_functions import doTestAuth, getUserMap, mkdir, send_links
+from slack_functions import getChannels, upload_reports
 from clean_data import standardized_files, user_by_week, get_classes, get_projects
 from generate_reports import send_report_request, test_result_request
 from google_functions import initiate, create_files_from_list, download_essays
@@ -29,9 +30,10 @@ def fluency_check(slack, class_name, userIdNameMap):
     upload_reports(slack, userIdNameMap, folder, list_of_reports)
     
 #Upload writing assignment
-def upload_assignment(class_name, project_name):
+def upload_assignment(slack, class_name, project_name, user_map):
     service = initiate()
-    create_files_from_list(service, class_name, project_name)
+    name_link = create_files_from_list(service, class_name, project_name)
+    send_links(slack, user_map, name_link)
     
 #Download writing assignment
 def download_assignment(class_name, project_name, pre_post):
@@ -123,7 +125,7 @@ if __name__ == "__main__":
     fluency_button.grid(row = 2, columnspan=4, column = 4, sticky='n,s,e,w')
     
     upload_button = tk.Button(m, text="Upload Writing Project",
-            command = lambda : upload_assignment(class_name, project_name))
+            command = lambda : upload_assignment(slack, class_name, project_name, userIdNameMap))
     upload_button.grid(row = 4, columnspan=3, column = 9, sticky='n,s,e,w')
     
     download_button = tk.Button(m, text="Download Writing Project",

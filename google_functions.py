@@ -40,6 +40,9 @@ def create_files_from_list(drive, class_name, project_name):
         project_list = pd.Series(project_list)
         project_list.to_csv('resources/projects.csv', index=False)
     
+    #Create name-link dictionary
+    name_link = {}
+    
     for student in student_dict.keys():
         
         #Set template
@@ -70,11 +73,15 @@ def create_files_from_list(drive, class_name, project_name):
                                          'value': student_dict[student],
                                          'role': 'writer'})
         
+        #Generate link
+        name_link[student] = f['alternateLink']
+        
         #Delete file
         os.remove(filename)
         
     #Confirmation
     print("All files created.")
+    return(name_link)
 
 #Returns the id(s) of specified files
 def get_file_id(drive, filenames, parent = 'root'):

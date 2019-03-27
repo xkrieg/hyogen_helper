@@ -4,6 +4,7 @@
 from slacker import Slacker
 from datetime import datetime
 import json
+import time
 import os
 
 #Ensure the authentication token works
@@ -70,7 +71,25 @@ def getChannels(slack, class_name):
             json.dump({'channel_info': channelInfo, 'messages': messages }, 
                         outFile, indent=4)
     return(parentDir)
+
+#Send assignment links as a private message on Slack
+def send_links(slack, user_map, name_link):
+    reverse = dict((v,k) for k,v in user_map.items())
+    keys = list(reverse.keys())
     
+    combined = {}
+    for key in keys:
+        if key in name_link:
+            combined[reverse[key]] = name_link[key]
+
+    values = list(combined.keys())
+    for value in values:
+        if value in combined:
+            slack.chat.post_message(value, combined[value])
+            time.sleep(1)
+
+    print("All links send to owners via direct message.")
+
 #Send reports as private message on Slack
 def upload_reports(slack, user_map, directory, list_of_files):
     
