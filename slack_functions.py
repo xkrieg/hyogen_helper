@@ -85,7 +85,8 @@ def send_links(slack, user_map, name_link):
     values = list(combined.keys())
     for value in values:
         if value in combined:
-            slack.chat.post_message(value, combined[value])
+            slack.chat.post_message(value, combined[value], username = '@xkrieg',
+                                    as_user = True)
             time.sleep(1)
 
     print("All links send to owners via direct message.")
