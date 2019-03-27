@@ -7,6 +7,7 @@ from pydrive.drive import GoogleDrive
 from subprocess import Popen
 from docx import Document
 import os.path
+import shutil
 import csv
 
 def initiate():
@@ -41,14 +42,22 @@ def create_files_from_list(drive, class_name, project_name):
     
     for student in student_dict.keys():
         
-        #Create word document
-        document = Document()
-        document.add_heading(project_name, level = 3)
-        document.add_heading(student, level=5)
-        
-        #Save word document
-        filename = "".join([student,"_",project_name,".docx"])
-        document.save(filename)
+        #Set template
+        template = "".join(["templates/", project_name, ".docx"])
+        if not os.path.isfile(template):
+            #Create word document
+            document = Document()
+            document.add_heading(project_name, level = 3)
+            document.add_heading("Essay Title: ", level = 5)
+            document.add_heading("Student Name: ", level = 5)
+            
+            #Save word document
+            template = "".join(["templates/", project_name, ".docx"])
+            document.save(template)
+            
+        #Make individualized files
+        filename = "".join(["templates/",student,"_",project_name,".docx"])
+        shutil.copy(template, filename)
         
         #Upload to folder
         f = drive.CreateFile({'title': filename, "parents": [{'kind': 'drive#fileLink', 
