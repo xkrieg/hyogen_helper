@@ -1,0 +1,112 @@
+</style>
+<center> <h4>Weekly English Fluency Assessment Report</h4> </center>
+<n></n>
+<center> <h5>Week: `r date`</h5> </center>
+<center> <h5>Student: `r name`</h5> </center>
+<n></n>
+Your weekly English fluency scores are presented in the following graphs. In each graph, your scores are compared to that of your classmates. The percentile does not represent your grade, but shows the percent of people who recieved a lower score than you did. After each graph, recommendations follow. 
+<n></n>
+<n></n>
+<center> <h5>Weekly Word Count</h5> </center>
+```{r score_table1, message=FALSE, warning=FALSE, echo = FALSE, cache=FALSE, fig.height=1.25, fig.width=8}
+
+#Generate plots
+library(ggplot2)
+
+print(ggplot(dist, aes(x = x, y = y)) + geom_line() +
+        geom_segment(aes(xend = x, yend = 0, color = x)) + 
+        scale_color_gradient2(guide = "none", low = 'red', mid = '#FDD0A2', high = '#FFF5EB', midpoint = .5) +
+        theme_minimal() + xlim(0,1) + xlab("Percentile") +
+        geom_segment(aes(x=word_count_z, xend=word_count_z, y=0, yend=1), data = my_df) +
+        geom_label(aes(x = word_count_z, y = 1, label = paste0(word_count," words")), data = my_df) +
+        scale_x_continuous(breaks = c(.023,.159,.5,.841,.977), labels =c("3%", "16%", "50%", "84%", "98%")) +
+        theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(),
+              axis.title.y = element_blank(), panel.grid.minor = element_blank()))
+```
+
+```{r feedback_1, fig.show = "hide", message=FALSE, warning=FALSE, echo = FALSE, cache=FALSE}
+if (my_df$word_count < 300){
+    print("Feedback: Please try to write more next week.")
+} else {
+    print("Feedback: Great job getting to 300 words! Please do the same next week.")
+}
+```
+<n></n>
+<n></n>
+<center> <h5>Vocabulary</h5> </center>
+```{r score_table2, message=FALSE, warning=FALSE, echo = FALSE, cache=FALSE, fig.height=1.25, fig.width=8}
+
+#Generate plots
+library(ggplot2)
+
+print(ggplot(dist, aes(x = x, y = y)) + geom_line() +
+        geom_segment(aes(xend = x, yend = 0, color = x)) + 
+        scale_color_gradient2(guide = "none", low = 'red', mid = '#FDD0A2', high = '#FFF5EB', midpoint = .5) +
+        theme_minimal() + xlim(0,1) + xlab("Percentile") +
+        geom_segment(aes(x=ave_word_len_z, xend=ave_word_len_z, y=0, yend=1), data = my_df) +
+        geom_label(aes(x=ave_word_len_z, y=1, label = paste0(round(ave_word_len,2)," letters per word")), data = my_df) +
+        scale_x_continuous(breaks = c(.023,.159,.5,.841,.977), labels =c("3%", "16%", "50%", "84%", "98%")) +
+        theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(),
+              axis.title.y = element_blank(), panel.grid.minor = element_blank()))
+```
+
+```{r feedback_2, fig.show = "hide", message=FALSE, warning=FALSE, echo = FALSE, cache=FALSE}
+if (my_df$ave_word_len_z < .38){
+    print("Feedback: Please try to expand the vocabulary you use on these assignments so that it includes bigger words.")
+} else {
+    print("Feedback: Great job using diverse vocabulary! Please do the same next week.")
+}
+```
+<n></n>
+<n></n>
+<center> <h5>Spelling Errors</h5> </center>
+```{r score_table3, message=FALSE, warning=FALSE, echo = FALSE, cache=FALSE, fig.height=1.25, fig.width=8}
+
+#Generate plots
+library(ggplot2)
+
+print(ggplot(dist, aes(x = x, y = y)) + geom_line() +
+        geom_segment(aes(xend = x, yend = 0, color = x)) + 
+        scale_color_gradient2(guide = "none", low = '#FFF5EB', mid = '#FDD0A2', high = 'red', midpoint = .5) +
+        theme_minimal() + xlim(0,1) + xlab("Percentile") +
+        geom_segment(aes(x=spell_check_z, xend=spell_check_z, y=0, yend=1), data = my_df) +
+        geom_label(aes(x=spell_check_z, y=1, label = paste0(round(spell_check,2)," spelling errors")), data = my_df) +
+        scale_x_continuous(breaks = c(.023,.159,.5,.841,.977), labels =c("3%", "16%", "50%", "84%", "98%")) +
+        theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(),
+              axis.title.y = element_blank(), panel.grid.minor = element_blank()))
+```
+
+```{r feedback_3, fig.show = "hide", message=FALSE, warning=FALSE, echo = FALSE, cache=FALSE}
+if (my_df$ave_word_len_z > .3){
+    print("Feedback: Please be careful of your spelling for next week.")
+} else {
+    print("Feedback: Great job spelling all of those words correctly! Please do the same next week.")
+}
+```
+<n></n>
+<n></n>
+<center> <h5>Grammar Errors</h5> </center>
+```{r score_table4, message=FALSE, warning=FALSE, echo = FALSE, cache=FALSE, fig.height=1.25, fig.width=8}
+
+#Generate plots
+library(ggplot2)
+
+print(ggplot(dist, aes(x = x, y = y)) + geom_line() +
+        geom_segment(aes(xend = x, yend = 0, color = x)) + 
+        scale_color_gradient2(guide = "none", low = '#FFF5EB', mid = '#FDD0A2', high = 'red', midpoint = .5) +
+        theme_minimal() + xlim(0,1) + xlab("Percentile") +
+        geom_segment(aes(x=grammar_check_z, xend=grammar_check_z, y=0, yend=1), data = my_df) +
+        geom_label(aes(x=grammar_check_z, y=1, label = paste0(round(grammar_check,2)," grammar mistakes")), data = my_df) +
+        scale_x_continuous(breaks = c(.023,.159,.5,.841,.977), labels =c("3%", "16%", "50%", "84%", "98%")) +
+        theme(axis.ticks.y = element_blank(), axis.text.y = element_blank(),
+              axis.title.y = element_blank(), panel.grid.minor = element_blank()))
+```
+
+```{r feedback_4, fig.show = "hide", message=FALSE, warning=FALSE, echo = FALSE, cache=FALSE}
+if (my_df$ave_word_len_z > .3){
+    print("Feedback: Please watch your grammar for next week.")
+} else {
+    print("Feedback: Great job with the grammar in your sentences! Please do the same next week.")
+}
+```
+Your total grade on this assignment is `r my_grades[,date]`%, and cumulatively `r my_grades$finalgrade`% (`r my_grades$finalletter`) for the class so far.

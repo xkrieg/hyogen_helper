@@ -1,0 +1,33 @@
+</style>
+<center> <h4>`r project_name`: Writing Assignment Assessment Report</h4> </center>
+<n></n>
+<center> <h5>Date: `r date`</h5> </center>
+<center> <h5>Student: `r name`</h5> </center>
+<n></n>
+Please see the following graphs in order to see your scores across domains before and after you revised your paper. Your final grade is printed at the bottom.   
+<n></n>
+<n></n>
+```{r score_table1, message=FALSE, warning=FALSE, echo = FALSE, cache=FALSE, fig.height=8, fig.width=8}
+
+#Generate plots
+library(ggplot2)
+ggplot(df, aes(x = revision, y = Score, fill = revision), na.rm = TRUE) + 
+    geom_violin(na.rm = TRUE, alpha = .6) +
+    geom_segment(data = my_seg_df, aes(x = 1, xend = 2, y = Before, yend = After),
+                 color = my_seg_df$color_map, inherit.aes=FALSE) +
+    geom_point(data = my_df, aes(x = revision, y = Score),
+                 fill = "white", shape = 21, size = 8) +
+    geom_text(data = my_df, aes(x = revision, y = Score, 
+                 label = as.character(round(Score,0)))) + 
+    scale_fill_manual(values = c("#66CC99", "#99CCFF")) + 
+    scale_x_discrete(name=NULL) + 
+    scale_y_continuous(breaks = seq(0, 100, by = 10), limits = c(1,100), name=NULL) +
+    theme(panel.grid.major.x = element_line(colour = "black", linetype = "dashed"),
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "white"),
+          legend.position="none",
+          panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
+    facet_grid(. ~ domain)
+```
+
+Your total grade on this assignment is `r my_grades[,project_name]`%, and cumulatively `r my_grades$finalgrade`% (`r my_grades$finalletter`) for the class up to this point.
