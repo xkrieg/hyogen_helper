@@ -10,7 +10,6 @@ if (length(args)!=1) {
 set.seed(3223)
 
 filename = args[1]
-#filename = "output/emosta_2019/2019-01-29/channels"
 filename = gsub("/channels", "", filename)
 class_name = strsplit(filename, "/")[[1]][2]
 df = read.csv(paste0(filename,"/weekly_wordcount.csv"), header = T)
@@ -29,9 +28,9 @@ for(name in df$user){
     
 grades[grades$user == name, as.character(df$date[1])] <- 
            round(df[df$user == name, "word_count"]/300, 2)*100
-    grades[grades$user == name, "denominator"] <- grades[grades$user == name, "denominator"] + 4
+    grades[grades$user == name, "denominator"] <- grades[grades$user == name, "denominator"] + 60
     grades[grades$user == name, "numerator"] <- grades[grades$user == name, "numerator"] + 
-                                                4*(grades[grades$user == name, as.character(df$date[1])]/100)
+                                                60*(grades[grades$user == name, as.character(df$date[1])]/100)
     grades[grades$user == name, "finalgrade"] <- round(grades[grades$user == name, "numerator"]/
                                                  grades[grades$user == name, "denominator"]*100, 0)
            

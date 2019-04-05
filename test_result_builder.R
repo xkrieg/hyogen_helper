@@ -61,9 +61,9 @@ for(name in unique(df$user)){
                         df[df$user == name & df$revision == "Before" & df$domain == "Grade", "Score"],0)
     grades[grades$user == name, args[2]] <- 
         df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"]
-    grades[grades$user == name, "denominator"] <- grades[grades$user == name, "denominator"] + 15
+    grades[grades$user == name, "denominator"] <- grades[grades$user == name, "denominator"] + 100
     grades[grades$user == name, "numerator"] <- grades[grades$user == name, "numerator"] + 
-                                                15*((grades[grades$user == name, args[2]]+improvement)/100)
+                                                100*((grades[grades$user == name, args[2]]+improvement)/100)
     grades[grades$user == name, "finalgrade"] <- round(grades[grades$user == name, "numerator"]/
                                                  grades[grades$user == name, "denominator"]*100,0)
 }
