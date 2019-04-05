@@ -1,0 +1,1 @@
+Missing files include `class_list.csv` that contains a column 'class' and a column 'key'. The class column contains a character list that corresponds to the names of the classes in the grade files. The 'key' column contains a list of Slack API keys that correspond with each classes Slack workgroups.
