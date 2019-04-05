@@ -1,8 +1,6 @@
-"ID","lastname","firstname","user","email","numerator","denominator","finalgrade","finalletter","bye","hi"
-12345,"Krieg","Xander","xkrieg","xkrieg@gmail.com",27.9,30,93,"S",85,85
-12346,"Ogawa","Shuhei","sogawa","xkrieg@emosta.com",26.1,30,87,"A",84,84
-12347,"Sakai","Tomohiro","tsakai","awkrieg@hawaii.edu",23.7,30,79,"B",81,81
-12348,"Fujsawa","Teppei","teppei.fujisawa","xander@psynary.com",24.3,30,81,"A",83,83
-12349,"Kumar","Vishnu","vishnu","xkrieg@emosta.com",25.8,30,86,"A",85,85
-12350,"Muta","Shoko","mshoko","awkrieg@hawaii.edu",26.4,30,88,"A",84,84
-12351,"Kondo","Shin","shinn.kondo","xander@psynary.com",24.9,30,83,"A",80,80
+ID,lastname_JA,firstname_JA,lastname_EN,firstname_EN,user,email,numerator,denominator,finalgrade,finalletter,bye,hi
+12345,____,____,Krieg,Xander,xkrieg,xkrieg@gmail.com,27.9,30,93,S,85,85
+12346,__,__,Ogawa,Shuhei,sogawa,xkrieg@emosta.com,26.1,30,87,A,84,84
+12347,__,__,Sakai,Tomohiro,tsakai,awkrieg@hawaii.edu,23.7,30,79,B,81,81
+12349,___,_____,Kumar,Vishnu,vishnu,xkrieg@emosta.com,25.8,30,86,A,85,85
+12350,__,___,Muta,Shoko,mshoko,awkrieg@hawaii.edu,26.4,30,88,A,84,84
