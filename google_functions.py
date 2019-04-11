@@ -59,7 +59,7 @@ def create_files_from_list(drive, class_name, project_name):
             document.save(template)
             
         #Make individualized files
-        filename = "".join(["templates/",student,"_",project_name,".docx"])
+        filename = "".join(["templates/",str(student),"_",str(project_name),".docx"])
         shutil.copy(template, filename)
         
         #Upload to folder
@@ -77,6 +77,7 @@ def create_files_from_list(drive, class_name, project_name):
         name_link[student] = f['alternateLink']
         
         #Delete file
+        print(filename)
         os.remove(filename)
         
     #Confirmation
@@ -121,7 +122,8 @@ def download_essays(drive, class_name, project_name, pre_post):
                                 'simple_starts': ['NA']*len(name),
                                 'vocabulary': ['NA']*len(name),	
                                 'grade': ['NA']*len(name), 'letter': ['NA']*len(name)})
-    filename = "".join(["output/",class_name,"/",project_name,"/",project_name,".csv"])
+    filename = "".join(["output/",str(class_name),"/",str(project_name),"/",str(project_name),".csv"])
+    print(filename)
     
     #Create or Append
     if os.path.isfile(filename):

@@ -19,6 +19,7 @@ def initialize(class_name):
     slack = Slacker(class_dict[class_name])
     testAuth = doTestAuth(slack)
     userIdNameMap = getUserMap(slack)
+    #print(userIdNameMap)
     return(slack, userIdNameMap)
 
 #Fluency assignment evaluation
