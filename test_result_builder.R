@@ -18,6 +18,8 @@ df = read.csv(filename, header = T)[,c(1,3:11)]
 library(car)
 df$revision = recode(df$revision, "'pre'='Before'; 'post' = 'After'")
 df$revision = relevel(df$revision, ref = "Before")
+df$passive_voice = 100-df$passive_voice
+df$sentence_length = 100-df$sentence_length
 
 #Reshape data
 library(tidyr)
