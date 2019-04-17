@@ -25,7 +25,7 @@ def create_files_from_list(drive, class_name, project_name):
     student_dict = dict(zip(student_dict['user'], student_dict['email']))
     
     #Create new folder
-    folder_metadata = {'title' : project_name,
+    folder_metadata = {'title' : "_".join([class_name, project_name]),
                        'mimeType' : 'application/vnd.google-apps.folder'}
     folder = drive.CreateFile(folder_metadata)
     folder.Upload()
@@ -59,7 +59,7 @@ def create_files_from_list(drive, class_name, project_name):
             document.save(template)
             
         #Make individualized files
-        filename = "".join(["templates/",str(student),"_",str(project_name),".docx"])
+        filename = "".join([str(student),"_",str(project_name),".docx"])
         shutil.copy(template, filename)
         
         #Upload to folder
@@ -97,7 +97,7 @@ def get_file_id(drive, filenames, parent = 'root'):
 #Download essays from google drive
 def download_essays(drive, class_name, project_name, pre_post):
     #Select project folder
-    folder = get_file_id(drive, project_name)[0]
+    folder = get_file_id(drive,"_".join([class_name, project_name]))[0]
     folder_id = folder['id']
 
     #Get list of files
@@ -110,8 +110,14 @@ def download_essays(drive, class_name, project_name, pre_post):
 
     for essay in essay_list:
         name.append(essay['title'])
-        essay_content.append(essay.GetContentString(mimetype='text/plain',remove_bom=True))
-        revision.append(pre_post) 
+        content = essay.GetContentString(mimetype='text/plain',remove_bom=True)
+        
+        #Fix curly quotes
+        content = content.replace(u'\u201c', '\"').replace(u'\u201d', '\"')
+        content = content.replace(u'\u2018', '\'').replace(u'\u2019', '\'')
+        
+        essay_content.append(content)
+        revision.append(pre_post)
 
     #Save essays    
     essays = pd.DataFrame(data={'name': name, 'essay_content': essay_content,
