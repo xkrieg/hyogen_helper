@@ -123,9 +123,9 @@ def user_by_week(directory):
     
     #Weekly values
     df['date'] = pd.to_datetime(df['date']) - pd.to_timedelta(7, unit='d')
-    agg_df = df.groupby(['user', pd.Grouper(key='date', freq='W-WED')])['ave_word_len','spell_check','grammar_check'].mean().reset_index().sort_values('date')
-    agg_df['word_count'] = df.groupby(['user', pd.Grouper(key='date', freq='W-WED')])['word_count'].sum().reset_index().sort_values('date')['word_count']
-    agg_df['longest_word'] = df.groupby(['user', pd.Grouper(key='date', freq='W-WED')])['longest_word'].max().reset_index().sort_values('date')['longest_word']
+    agg_df = df.groupby(['user', pd.Grouper(key='date', freq='W-THU')])['ave_word_len','spell_check','grammar_check'].mean().reset_index().sort_values('date')
+    agg_df['word_count'] = df.groupby(['user', pd.Grouper(key='date', freq='W-THU')])['word_count'].sum().reset_index().sort_values('date')['word_count']
+    agg_df['longest_word'] = df.groupby(['user', pd.Grouper(key='date', freq='W-THU')])['longest_word'].max().reset_index().sort_values('date')['longest_word']
     
     #Total wordcount
     total_words = df.groupby(['user'])['word_count'].sum().reset_index()
