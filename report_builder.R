@@ -24,13 +24,23 @@ grades = read.csv(grade_file, header = T)
 grades[,as.character(df$date[1])] <-rep(0,nrow(grades))
 grades$user <- as.character(grades$user)
 
-for(name in df$user){
+for (name in grade$user) {
     
-grades[grades$user == name, as.character(df$date[1])] <- 
-           round(df[df$user == name, "word_count"]/300, 2)*100
+    #Set denominator
     grades[grades$user == name, "denominator"] <- grades[grades$user == name, "denominator"] + 60
+    
+    #Add assignment grade
+    if (name %in% df$user){
+        grades[grades$user == name, as.character(df$date[1])] <- 
+            round(df[df$user == name, "word_count"]/300, 2)*100
+    } else {
+        grades[grades$user == name, as.character(df$date[1])] <- 0
+    }
+
+    #Set numerator
     grades[grades$user == name, "numerator"] <- grades[grades$user == name, "numerator"] + 
                                                 60*(grades[grades$user == name, as.character(df$date[1])]/100)
+    #Re-calculate final grade
     grades[grades$user == name, "finalgrade"] <- round(grades[grades$user == name, "numerator"]/
                                                  grades[grades$user == name, "denominator"]*100, 0)
            
