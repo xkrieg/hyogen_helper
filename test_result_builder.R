@@ -18,8 +18,8 @@ df = read.csv(filename, header = T)[,c(1,3:11)]
 library(car)
 df$revision = recode(df$revision, "'pre'='Before'; 'post' = 'After'")
 df$revision = relevel(df$revision, ref = "Before")
-df$passive_voice = 100-df$passive_voice
-df$sentence_length = 100-df$sentence_length
+df$passive_voice = df$passive_voice
+df$sentence_length = df$sentence_length
 
 #Reshape data
 library(tidyr)
@@ -59,8 +59,8 @@ grades[,args[2]] <-rep(0,nrow(grades))
 
 for(name in unique(df$user)){
     
-    improvement = round(df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"]-
-                        df[df$user == name & df$revision == "Before" & df$domain == "Grade", "Score"],0)
+    improvement = abs(round(df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"]-
+                        df[df$user == name & df$revision == "Before" & df$domain == "Grade", "Score"],0))
     grades[grades$user == name, args[2]] <- 
         df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"]
     grades[grades$user == name, "denominator"] <- grades[grades$user == name, "denominator"] + 100

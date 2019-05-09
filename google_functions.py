@@ -45,41 +45,46 @@ def create_files_from_list(drive, class_name, project_name):
     
     for student in student_dict.keys():
         
-        #Set template
-        template = "".join(["templates/", project_name, ".docx"])
-        if not os.path.isfile(template):
-            #Create word document
-            document = Document()
-            document.add_heading(project_name, level = 3)
-            document.add_heading("Essay Title: ", level = 5)
-            document.add_heading("Student Name: ", level = 5)
-            
-            #Save word document
+        try:
+            #Set template
             template = "".join(["templates/", project_name, ".docx"])
-            document.save(template)
+            if not os.path.isfile(template):
+                #Create word document
+                document = Document()
+                document.add_heading(project_name, level = 3)
+                document.add_heading("Essay Title: ", level = 5)
+                document.add_heading("Student Name: ", level = 5)
+                
+                #Save word document
+                template = "".join(["templates/", project_name, ".docx"])
+                document.save(template)
+                
+            #Make individualized files
+            filename = "".join([str(student),"_",str(project_name),".docx"])
+            shutil.copy(template, filename)
             
-        #Make individualized files
-        filename = "".join([str(student),"_",str(project_name),".docx"])
-        shutil.copy(template, filename)
-        
-        #Upload to folder
-        f = drive.CreateFile({'title': filename, "parents": [{'kind': 'drive#fileLink', 
-            'id': folder['id']}], 'mimeType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'})
-        f.SetContentFile(filename)
-        f.Upload(param={'convert': True})
-                                                
-        #Share file
-        permission = f.InsertPermission({'type': 'user',
-                                         'value': student_dict[student],
-                                         'role': 'writer'})
-        
-        #Generate link
-        name_link[student] = f['alternateLink']
-        
-        #Delete file
-        print(filename)
-        os.remove(filename)
-        
+            #Upload to folder
+            f = drive.CreateFile({'title': filename, "parents": [{'kind': 'drive#fileLink', 
+                'id': folder['id']}], 'mimeType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'})
+            f.SetContentFile(filename)
+            f.Upload(param={'convert': True})
+                                                    
+            #Share file
+            permission = f.InsertPermission({'type': 'user',
+                                             'value': student_dict[student],
+                                             'role': 'writer'})
+            
+            #Generate link
+            name_link[student] = f['alternateLink']
+            
+            #Delete file
+            print(filename)
+            os.remove(filename)
+
+        except Exception as e:
+            print("Failed on %s" % (filename))
+            print(e)
+
     #Confirmation
     print("All files created.")
     return(name_link)

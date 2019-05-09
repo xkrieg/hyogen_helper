@@ -24,7 +24,7 @@ grades = read.csv(grade_file, header = T)
 grades[,as.character(df$date[1])] <-rep(0,nrow(grades))
 grades$user <- as.character(grades$user)
 
-for (name in grade$user) {
+for (name in grades$user) {
     
     #Set denominator
     grades[grades$user == name, "denominator"] <- grades[grades$user == name, "denominator"] + 60
