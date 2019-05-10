@@ -61,6 +61,12 @@ for(name in unique(df$user)){
     
     improvement = abs(round(df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"]-
                         df[df$user == name & df$revision == "Before" & df$domain == "Grade", "Score"],0))
+    
+    #Give no bonus to students who did not turn in a draft
+    if (improvement < 40){
+        improvement = 0
+    }
+    
     grades[grades$user == name, args[2]] <- 
         df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"]
     grades[grades$user == name, "denominator"] <- grades[grades$user == name, "denominator"] + 100
