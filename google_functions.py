@@ -126,13 +126,13 @@ def download_essays(drive, class_name, project_name, pre_post):
 
     #Save essays    
     essays = pd.DataFrame(data={'name': name, 'essay_content': essay_content,
-                                'revision': revision, 'word_choice': ['NA']*len(name),
-                                'transitional_phrases': ['NA']*len(name), 
-                                'sentence_length': ['NA']*len(name),
-                                'passive_voice': ['NA']*len(name), 
-                                'simple_starts': ['NA']*len(name),
-                                'vocabulary': ['NA']*len(name),	
-                                'grade': ['NA']*len(name), 'letter': ['NA']*len(name)})
+                                'revision': revision, 'word_choice': ['0']*len(name),
+                                'transitional_phrases': ['0']*len(name), 
+                                'sentence_length': ['0']*len(name),
+                                'passive_voice': ['0']*len(name), 
+                                'simple_starts': ['0']*len(name),
+                                'vocabulary': ['0']*len(name),	
+                                'grade': ['0']*len(name), 'letter': ['F']*len(name)})
     filename = "".join(["output/",str(class_name),"/",str(project_name),"/",str(project_name),".csv"])
     print(filename)
     
