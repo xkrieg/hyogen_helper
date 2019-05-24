@@ -13,6 +13,7 @@ from slack_functions import getChannels, upload_reports
 from clean_data import standardized_files, user_by_week, get_classes, get_projects
 from generate_reports import send_report_request, test_result_request
 from google_functions import initiate, create_files_from_list, download_essays
+from pdf_reader import read_pdfs
 
 #Get token and test authorization
 def initialize(class_name):
@@ -46,10 +47,13 @@ def download_assignment(class_name, project_name, pre_post):
 def distribute_assignment(slack, class_name, project_name, userIdNameMap, pre_post):
     directory = "".join(["output/",class_name,"/",project_name,"/",pre_post,"_reports"])
     
+    #read from reports
+    read_pdfs(path = directory, pre_post = pre_post)
+    
     if pre_post == "post":
         test_reports = test_result_request(class_name, project_name, pre_post)
     else:
-        test_reports = [pdf for pdf in os.listdir(directory) if pdf.endswith('.pdf')]
+        test_reports = [pdf for pdf in os.listdir(directory) if pdf.endswith('_report.pdf')]
     
     upload_reports(slack, userIdNameMap, directory, test_reports)
 
