@@ -8,21 +8,21 @@ if (length(args)!=2) {
 }
 
 #To test script
-#args = c("emosta_2019","hi")
+#args = c("hyogenACE_2019","descriptive_essay")
 
 #Read file
 filename = paste0("output/",args[1],"/",args[2],"/",args[2],".csv")
 df = read.csv(filename, header = T)[,c(1,3:11)]
 
 #Recode data
-library(car)
+suppressMessages(library(car))
 df$revision = recode(df$revision, "'pre'='Before'; 'post' = 'After'")
 df$revision = relevel(df$revision, ref = "Before")
 df$passive_voice = df$passive_voice
 df$sentence_length = df$sentence_length
 
 #Reshape data
-library(tidyr)
+suppressMessages(library(tidyr))
 df <- df %>% gather(domain, Score, word_choice:grade)
 df$domain <- as.factor(df$domain)
 levels(df$domain) <- c("Grade","Passive Voice","Sentence Length","Simple Starts",
@@ -31,6 +31,7 @@ df$domain <- as.character(df$domain)
 df$user <- gsub(paste0("_",args[2]), "", as.character(df$name))
 
 #Segmentation dataframe
+df$letter <-NULL
 seg_df <- df %>% spread(revision, Score)
 
 #Add color
@@ -63,15 +64,15 @@ for(name in unique(df$user)){
                         df[df$user == name & df$revision == "Before" & df$domain == "Grade", "Score"],0))
     
     #Give no bonus to students who did not turn in a draft
-    if (improvement < 40){
+    if (improvement > 30){
         improvement = 0
     }
     
     grades[grades$user == name, args[2]] <- 
-        df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"]
+        df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"] + improvement
     grades[grades$user == name, "denominator"] <- grades[grades$user == name, "denominator"] + 100
     grades[grades$user == name, "numerator"] <- grades[grades$user == name, "numerator"] + 
-                                                100*((grades[grades$user == name, args[2]]+improvement)/100)
+                                                grades[grades$user == name, args[2]]
     grades[grades$user == name, "finalgrade"] <- round(grades[grades$user == name, "numerator"]/
                                                  grades[grades$user == name, "denominator"]*100,0)
 }
