@@ -47,13 +47,13 @@ def download_assignment(class_name, project_name, pre_post):
 def distribute_assignment(slack, class_name, project_name, userIdNameMap, pre_post):
     directory = "".join(["output/",class_name,"/",project_name,"/",pre_post,"_reports"])
     
-    #read from reports
+    #Read from reports
     read_pdfs(path = directory, pre_post = pre_post)
     
     if pre_post == "post":
         test_reports = test_result_request(class_name, project_name, pre_post)
     else:
-        test_reports = [pdf for pdf in os.listdir(directory) if pdf.endswith('_report.pdf')]
+        test_reports = [pdf for pdf in os.listdir(directory) if pdf.endswith('pre_report.pdf')]
     
     upload_reports(slack, userIdNameMap, directory, test_reports)
 
