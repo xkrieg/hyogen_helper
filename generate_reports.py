@@ -30,6 +30,6 @@ def test_result_request(class_name, project_name, pre_post):
     #Gather list of pdfs
     directory = "".join(['output/',class_name,"/",project_name,"/",pre_post,"_reports"])
     mkdir(directory)
-    list_of_reports = [pdfs for pdfs in os.listdir(directory) if pdfs.endswith('_report.pdf')]
+    list_of_reports = [pdfs for pdfs in os.listdir(directory) if pdfs.endswith('final_report.pdf')]
     
     return(list_of_reports)
