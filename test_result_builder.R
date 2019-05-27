@@ -99,7 +99,7 @@ for (i in as.character(unique(df$user))){
 
     #Text-based data
     project_name <- args[2]
-    my_filename = paste0("output/",args[1],"/",args[2],"/post_reports/", my_df$user[1],"_report.html") 
+    my_filename = paste0("output/",args[1],"/",args[2],"/post_reports/", my_df$user[1],"_final_report.html") 
     date = Sys.Date()
     name = paste(grades[grades$user == i,"firstname"], 
                  grades[grades$user == i,"lastname"])
