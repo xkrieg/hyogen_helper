@@ -120,22 +120,23 @@ def standardized_files(directory, user_map):
 def user_by_week(directory):
     #Load file
     df = pd.read_csv("/".join([directory[:-len("/channels")],"total_wordcount.csv"]))
-    
+
     #Weekly values
-    df['date'] = pd.to_datetime(df['date']) - pd.to_timedelta(7, unit='d')
-    agg_df = df.groupby(['user', pd.Grouper(key='date', freq='W-THU')])['ave_word_len','spell_check','grammar_check'].mean().reset_index().sort_values('date')
-    agg_df['word_count'] = df.groupby(['user', pd.Grouper(key='date', freq='W-THU')])['word_count'].sum().reset_index().sort_values('date')['word_count']
-    agg_df['longest_word'] = df.groupby(['user', pd.Grouper(key='date', freq='W-THU')])['longest_word'].max().reset_index().sort_values('date')['longest_word']
-    
+    df['date'] = pd.to_datetime(df['date'])
+    cutoff = max(df['date']) - pd.to_timedelta(8, unit='d')
+    temp_df = df.loc[df['date'] >= cutoff]
+    agg_df = temp_df.groupby(['user'])['ave_word_len','spell_check','grammar_check'].mean().reset_index()
+    agg_df['word_count'] = temp_df.groupby(['user'])['word_count'].sum().reset_index()['word_count']
+    agg_df['longest_word'] = temp_df.groupby(['user'])['longest_word'].max().reset_index()['longest_word']
+
     #Total wordcount
     total_words = df.groupby(['user'])['word_count'].sum().reset_index()
     total_words.columns = ['user', 'total_words']
-    
+
     agg_df = pd.merge(agg_df, total_words, how='inner', on = 'user')
     #Reorganize columns
     agg_df = agg_df.loc[:, ['user','date','word_count','ave_word_len','longest_word',
                             'spell_check','grammar_check','total_words']]
-    
-    agg_df.to_csv("/".join([directory[:-len("/channels")],"weekly_wordcount.csv"]),index=False)
-                    
+
+    agg_df.to_csv("/".join([directory[:-len("/channels")],"weekly_wordcountTEST.csv"]),index=False)
     print("Weekly Word Count File Saved.")
