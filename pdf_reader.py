@@ -9,16 +9,16 @@ import re
 def read_pdfs(path, pre_post = "pre"):
     
     #Open repository
-    directory_path = "".join([path[:path.index("pre_reports")], path.split("/")[2], ".csv"])
+    directory_path = "".join([path[:path.index("_".join([pre_post,"reports"]))], path.split("/")[2], ".csv"])
     repository = pd.read_csv(directory_path)
 
     files = []
     for dirpath, dirnames, filenames in os.walk(path):
-        for filename in [f for f in filenames if f.endswith(".pdf")]:
+        for filename in [f for f in filenames if f.endswith("".join([pre_post, "_report.pdf"]))]:
             files.append(os.path.join(dirpath, filename))
 
     for file in files:
-    
+        
         args = ["pdftotext", '-enc', 'UTF-8', file, '-']
         res = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         output = res.stdout.decode('utf-8')
@@ -47,9 +47,11 @@ def read_pdfs(path, pre_post = "pre"):
             passive = 100
         
         percentages = percentages[0:3] + [passive] + [percentages[i] for i in [6, 16]] + [final_grade] + [letter]
+    
+        #Get name
         name = file.split("/")[-1]
-        name = name[:name.index('_pre_report.pdf')]
-        
+        name = name[:name.index("_".join(["", pre_post, "report.pdf"]))]
+
         for i, row in repository.iterrows():
             if repository.loc[i, "name"] == name and repository.loc[i, "revision"] == pre_post:
                 repository.loc[i, "word_choice"] = percentages[0]
@@ -60,10 +62,12 @@ def read_pdfs(path, pre_post = "pre"):
                 repository.loc[i, "vocabulary"] = percentages[5]
                 repository.loc[i, "grade"] = percentages[6]
                 repository.loc[i, "letter"] = percentages[7]
-                
-    #Save csv file
-    repository = repository.fillna(0)
-    repository.to_csv(directory_path, index = False)
+                    
+        #Save csv file
+        repository = repository.fillna(0)
+        repository.to_csv(directory_path, index = False)
+        
+    print("Repository updated.")
 
 if __name__ == "__main__":
     

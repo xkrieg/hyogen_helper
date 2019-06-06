@@ -128,6 +128,7 @@ def user_by_week(directory):
     agg_df = temp_df.groupby(['user'])['ave_word_len','spell_check','grammar_check'].mean().reset_index()
     agg_df['word_count'] = temp_df.groupby(['user'])['word_count'].sum().reset_index()['word_count']
     agg_df['longest_word'] = temp_df.groupby(['user'])['longest_word'].max().reset_index()['longest_word']
+    agg_df['date'] = [datetime.now().strftime('%Y-%m-%d')] * len(agg_df.index)
 
     #Total wordcount
     total_words = df.groupby(['user'])['word_count'].sum().reset_index()
@@ -138,5 +139,5 @@ def user_by_week(directory):
     agg_df = agg_df.loc[:, ['user','date','word_count','ave_word_len','longest_word',
                             'spell_check','grammar_check','total_words']]
 
-    agg_df.to_csv("/".join([directory[:-len("/channels")],"weekly_wordcountTEST.csv"]),index=False)
+    agg_df.to_csv("/".join([directory[:-len("/channels")],"weekly_wordcount.csv"]),index=False)
     print("Weekly Word Count File Saved.")
