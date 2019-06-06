@@ -111,6 +111,7 @@ def download_essays(drive, class_name, project_name, pre_post):
     #Add file content to dataframe
     name = []
     essay_content = []
+    word_count = []
     revision = []
 
     for essay in essay_list:
@@ -122,11 +123,14 @@ def download_essays(drive, class_name, project_name, pre_post):
         content = content.replace(u'\u2018', '\'').replace(u'\u2019', '\'')
         
         essay_content.append(content)
+        word_count.append(len(content.split(' ')))
         revision.append(pre_post)
 
     #Save essays    
-    essays = pd.DataFrame(data={'name': name, 'essay_content': essay_content,
+    essays = pd.DataFrame(data={'name': name, 
+                                'essay_content': essay_content,
                                 'revision': revision, 'word_choice': ['0']*len(name),
+                                'word_count': word_count,
                                 'transitional_phrases': ['0']*len(name), 
                                 'sentence_length': ['0']*len(name),
                                 'passive_voice': ['0']*len(name), 
