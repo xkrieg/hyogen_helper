@@ -123,7 +123,7 @@ def user_by_week(directory):
 
     #Weekly values
     df['date'] = pd.to_datetime(df['date'])
-    cutoff = max(df['date']) - pd.to_timedelta(8, unit='d')
+    cutoff = max(df['date']) - pd.to_timedelta(7, unit='d')
     temp_df = df.loc[df['date'] >= cutoff]
     agg_df = temp_df.groupby(['user'])['ave_word_len','spell_check','grammar_check'].mean().reset_index()
     agg_df['word_count'] = temp_df.groupby(['user'])['word_count'].sum().reset_index()['word_count']
