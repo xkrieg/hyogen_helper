@@ -109,4 +109,5 @@ if (my_df$ave_word_len_z > .3){
     print("Feedback: Great job with the grammar in your sentences! Please do the same next week.")
 }
 ```
-Your total grade on this assignment is `r my_grades[,date]`%, and cumulatively `r my_grades$finalgrade`% (`r my_grades$finalletter`) for the class so far.
+
+You have completed `r as.character(my_df[,"total_words"][1])` out of 3,000 words for the semester. Your total grade on this assignment is `r my_grades[,date]`%, and cumulatively `r my_grades$finalgrade`% (`r my_grades$finalletter`) for the class so far.
