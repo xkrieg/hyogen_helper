@@ -8,7 +8,7 @@ if (length(args)!=2) {
 }
 
 #To test script
-#args = c("hyogenACE_2019","descriptive_essay")
+#args = c("hyogenACE_2019","process_essay")
 
 #Read file
 filename = paste0("output/",args[1],"/",args[2],"/",args[2],".csv")
@@ -23,6 +23,7 @@ df$sentence_length = df$sentence_length
 
 #Reshape data
 suppressMessages(library(tidyr))
+df$word_count <- NULL
 df <- df %>% gather(domain, Score, word_choice:grade)
 df$domain <- as.factor(df$domain)
 levels(df$domain) <- c("Grade","Passive Voice","Sentence Length","Simple Starts",
