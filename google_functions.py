@@ -6,6 +6,7 @@ from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 from subprocess import Popen
 from docx import Document
+from time import sleep
 import os.path
 import shutil
 import csv
@@ -68,6 +69,7 @@ def create_files_from_list(drive, class_name, project_name):
                 'id': folder['id']}], 'mimeType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'})
             f.SetContentFile(filename)
             f.Upload(param={'convert': True})
+            sleep(1) #Avoid timeout
                                                     
             #Share file
             permission = f.InsertPermission({'type': 'user',
@@ -80,6 +82,7 @@ def create_files_from_list(drive, class_name, project_name):
             #Delete file
             print(filename)
             os.remove(filename)
+            sleep(1) #Avoid timeout
 
         except Exception as e:
             print("Failed on %s" % (filename))
