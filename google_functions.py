@@ -119,7 +119,11 @@ def download_essays(drive, class_name, project_name, pre_post):
 
     for essay in essay_list:
         name.append(essay['title'])
-        content = essay.GetContentString(mimetype='text/plain',remove_bom=True)
+        try:
+            content = essay.GetContentString(mimetype='text/plain', remove_bom=True)
+        except(KeyError):
+            content = "Error-Generated Content"
+            print("".join(["Error with ", essay['title']]))
         
         #Fix curly quotes
         content = content.replace(u'\u201c', '\"').replace(u'\u201d', '\"')
