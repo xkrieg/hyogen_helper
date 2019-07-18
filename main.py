@@ -30,6 +30,7 @@ def fluency_check(slack, class_name, userIdNameMap):
     user_by_week(folder)
     list_of_reports = send_report_request(folder)
     upload_reports(slack, userIdNameMap, folder, list_of_reports)
+    print("Done")
     
 #Upload writing assignment
 def upload_assignment(slack, class_name, project_name, user_map):
