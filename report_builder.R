@@ -32,9 +32,14 @@ for (name in grades$user) {
     #Add assignment grade
     if (name %in% df$user){
         grades[grades$user == name, as.character(df$date[1])] <- 
-            round(df[df$user == name, "word_count"]/300, 2)*100
+            round(df[df$user == name, "word_count"]/100, 2)*100
     } else {
         grades[grades$user == name, as.character(df$date[1])] <- 0
+    }
+    
+    #Limit extra credit to 110%
+    if (grades[grades$user == name, as.character(df$date[1])] >  108.333333333){
+        grades[grades$user == name, as.character(df$date[1])] <- 108.333333333
     }
 
     #Set numerator
@@ -43,7 +48,6 @@ for (name in grades$user) {
     #Re-calculate final grade
     grades[grades$user == name, "finalgrade"] <- round(grades[grades$user == name, "numerator"]/
                                                  grades[grades$user == name, "denominator"]*100, 0)
-           
 }
 
 library(car)
