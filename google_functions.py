@@ -65,26 +65,26 @@ def create_files_from_list(drive, class_name, project_name):
             shutil.copy(template, filename)
             
             #Upload to folder
-            sleep(2)
+            sleep(3)
             f = drive.CreateFile({'title': filename, "parents": [{'kind': 'drive#fileLink', 
                 'id': folder['id']}], 'mimeType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'})
             f.SetContentFile(filename)
             f.Upload(param={'convert': True})
-            sleep(2) #Avoid timeout
+            sleep(3) #Avoid timeout
                                                     
             #Share file
             permission = f.InsertPermission({'type': 'user',
                                              'value': student_dict[student],
                                              'role': 'writer'})
             
-            sleep(2)
+            sleep(3)
             #Generate link
             name_link[student] = f['alternateLink']
             
             #Delete file
             print(filename)
             os.remove(filename)
-            sleep(1) #Avoid timeout
+            sleep(2) #Avoid timeout
 
         except Exception as e:
             print("Failed on %s" % (filename))
