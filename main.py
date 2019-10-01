@@ -8,9 +8,9 @@ from subprocess import check_call
 import os
 
 #Import local functions
-from slack_functions import doTestAuth, getUserMap, mkdir, send_links
-from slack_functions import getChannels, upload_reports
-from clean_data import standardized_files, user_by_week, get_classes, get_projects
+from slack_functions import doTestAuth, getUserMap, mkdir, send_links, send_mpfi
+from slack_functions import getChannels, upload_reports, add_slack_topic
+from clean_data import standardized_files, user_by_week, get_classes, get_projects, get_topics
 from generate_reports import send_report_request, test_result_request
 from google_functions import initiate, create_files_from_list, download_essays
 from pdf_reader import read_pdfs
@@ -62,11 +62,13 @@ if __name__ == "__main__":
     #Get selection resources
     class_dict = get_classes()
     project_list = get_projects()
+    topic_list, topic_names = get_topics()
     
     #Preset global variables
     class_name = list(class_dict.keys())[0]
     slack, userIdNameMap = initialize(class_name)
     project_name = project_list[0]
+    topic_name = topic_names[0]
     pre_post_list = ["pre","post"]
     pre_post = "pre"
     
@@ -93,9 +95,20 @@ if __name__ == "__main__":
         project_name = tk_projectvar.get()
     tk_projectvar.set(project_name) #Set the default option
     project_popupMenu = tk.OptionMenu(m, tk_projectvar, *project_list)
-    tk.Label(m, text="Choose a project:").grid(row = 3, column = 0, sticky='w')
-    project_popupMenu.grid(row = 4, columnspan=3, column = 0, sticky='e,w')
+    tk.Label(m, text="Choose a project:").grid(row = 5, column = 0, sticky='w')
+    project_popupMenu.grid(row = 6, columnspan=3, column = 0, sticky='e,w')
     tk_projectvar.trace('w', change_project_dropdown)
+    
+    #Topic dropdown
+    tk_topicvar = tk.StringVar(m)
+    def change_topic_dropdown(*args):
+        global topic_name
+        topic_name = tk_topicvar.get()
+    tk_topicvar.set(topic_name) #Set the default option
+    topic_popupMenu = tk.OptionMenu(m, tk_topicvar, *topic_names)
+    tk.Label(m, text="Choose a Topic:").grid(row = 3, column = 0, sticky='w')
+    topic_popupMenu.grid(row = 4, columnspan=4, column = 0, sticky='e,w')
+    tk_topicvar.trace('w', change_topic_dropdown)
     
     #Add new project
     def add_project(string_var):
@@ -106,12 +119,22 @@ if __name__ == "__main__":
     #New project text entry
     v = tk.StringVar(m, value='< new project >')
     new_project = tk.Entry(m, textvariable=v)
-    new_project.grid(row = 4, columnspan=3, column = 3, sticky='n,s,e,w')
+    new_project.grid(row = 6, columnspan=3, column = 3, sticky='n,s,e,w')
     
     #Submit new project button
     submit_button = tk.Button(m, text="Submit New Project",
                               command = lambda : add_project(v))
-    submit_button.grid(row = 4, columnspan=3, column = 6, sticky='e,w')
+    submit_button.grid(row = 6, columnspan=3, column = 6, sticky='e,w')
+    
+    #Send topic button
+    add_topic_button = tk.Button(m, text="Add Topic",
+                              command = lambda : add_slack_topic(slack, class_name, userIdNameMap, topic_name))
+    add_topic_button.grid(row = 4, columnspan=4, column = 4, sticky='e,w')
+    
+    #Send MPFI
+    send_mpfi_button = tk.Button(m, text="Send MPFI",
+                              command = lambda : send_mpfi(slack, class_name, userIdNameMap))
+    send_mpfi_button.grid(row = 4, columnspan=4, column = 8, sticky='e,w')
     
     #Pre_post dropdown
     tk_prepostvar = tk.StringVar(m)
@@ -121,7 +144,7 @@ if __name__ == "__main__":
     tk_prepostvar.set(pre_post) #Set the default option
     prepost_popupMenu = tk.OptionMenu(m, tk_prepostvar, *pre_post_list)
     tk.Label(m, text="Choose pre/post revision:").grid(row = 5, column = 0, sticky='w')
-    prepost_popupMenu.grid(row = 6, columnspan=4, column = 0, sticky='n,s,e,w')
+    prepost_popupMenu.grid(row = 8, columnspan=4, column = 0, sticky='n,s,e,w')
     tk_prepostvar.trace('w', change_prepost_dropdown)
     
     ### Four Buttons ###
@@ -131,16 +154,16 @@ if __name__ == "__main__":
     
     upload_button = tk.Button(m, text="Upload Writing Project",
             command = lambda : upload_assignment(slack, class_name, project_name, userIdNameMap))
-    upload_button.grid(row = 4, columnspan=3, column = 9, sticky='n,s,e,w')
+    upload_button.grid(row = 6, columnspan=3, column = 9, sticky='n,s,e,w')
     
     download_button = tk.Button(m, text="Download Writing Project",
             command = lambda : download_assignment(class_name, project_name, pre_post))
-    download_button.grid(row = 6, columnspan=4, column = 4, sticky='n,s,e,w')
+    download_button.grid(row = 8, columnspan=4, column = 4, sticky='n,s,e,w')
     
     distribute_button = tk.Button(m, text="Distribute Writing Reports",
             command = lambda : distribute_assignment(slack, class_name, project_name, 
                                                      userIdNameMap, pre_post))
-    distribute_button.grid(row = 6, columnspan=4, column = 8, sticky='n,s,e,w')
+    distribute_button.grid(row = 8, columnspan=4, column = 8, sticky='n,s,e,w')
     
     #Open Resource Folder
     def open_resources():
@@ -150,5 +173,5 @@ if __name__ == "__main__":
     
     #Exit button
     exit_button = tk.Button(m, text='Exit', width=25, command=m.destroy)
-    exit_button.grid(row = 7, column = 4, columnspan=4, sticky='n,s,e,w')
+    exit_button.grid(row = 9, column = 4, columnspan=4, sticky='n,s,e,w')
     m.mainloop()

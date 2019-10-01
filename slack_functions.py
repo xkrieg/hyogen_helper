@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #Import required libraries
+import pandas as pd
 from slacker import Slacker
 from datetime import datetime
 import json
@@ -110,15 +111,19 @@ def upload_reports(slack, user_map, directory, list_of_files):
                        
     print("Successfully uploaded reports.")
     
-def add_slack_topic(slack, class_name, userIdNameMap, channel_name, question):
+def add_slack_topic(slack, class_name, userIdNameMap, channel_name):
     
     #Get list of students and emails
     student_dict = pd.read_csv("".join(["resources/",class_name,"_grades.csv"]))
     student_dict = list(student_dict['user'])
     members = [key  for (key, value) in userIdNameMap.items() if value in student_dict]
     
+    #Locate question
+    topic_list = pd.read_csv('resources/topics.csv')
+    question = topic_list.loc[topic_list['name'] == channel_name]['question']
+    
     #Create channel
-    slack.channels.create(name)
+    slack.channels.create(channel_name)
     
     #Find channel id
     channels = slack.channels.list().body['channels']

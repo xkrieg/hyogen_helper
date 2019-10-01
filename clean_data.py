@@ -24,6 +24,12 @@ def get_projects():
         project_list = list(reader)
         project_list = [item for sublist in project_list for item in sublist]
     return(project_list)
+    
+##Get topic info
+def get_topics():
+    topic_list = pd.read_csv('resources/topics.csv')
+    topic_names = list(topic_list['name'])
+    return(topic_list, topic_names)
 
 #Returns of all json files in directory
 def get_files(directory):
