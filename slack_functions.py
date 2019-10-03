@@ -138,7 +138,7 @@ def add_slack_topic(slack, class_name, userIdNameMap, channel_name):
     
     #Set purpose and post question
     slack.channels.set_purpose(channel = channel_id, purpose = question)
-    slack.chat.post_message(channel = name, text = question, username='@xkrieg',
+    slack.chat.post_message(channel = channel_name, text = question, username='@xkrieg',
                             as_user = True)
     print("Added topic:", name)
     
