@@ -104,11 +104,17 @@ def upload_reports(slack, user_map, directory, list_of_files):
         title_text = 'Writing Assignment Feedback'
     
     for file in list_of_files:
-        user_name = file.split("_")[0]
-        slack.files.upload("/".join([directory,file]),
-                           channels=[keys[values.index(user_name)]],
-                           title=title_text)
-                       
+        try:
+            user_name = file.split("_")[0]
+            if user_name == "tekkamen":
+                user_name = "tekkamen_75"
+            
+            slack.files.upload("/".join([directory,file]),
+                               channels=[keys[values.index(user_name)]],
+                               title=title_text)
+        except Exception as e:
+            print(e)
+
     print("Successfully uploaded reports.")
     
 def add_slack_topic(slack, class_name, userIdNameMap, channel_name):
@@ -140,7 +146,7 @@ def add_slack_topic(slack, class_name, userIdNameMap, channel_name):
     slack.channels.set_purpose(channel = channel_id, purpose = question)
     slack.chat.post_message(channel = channel_name, text = question, username='@xkrieg',
                             as_user = True)
-    print("Added topic:", name)
+    print("Added topic:", channel_name)
     
 def send_mpfi(slack, class_name, userIdNameMap):
     
