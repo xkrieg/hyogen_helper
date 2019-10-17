@@ -65,7 +65,9 @@ for(name in unique(df$user)){
                         df[df$user == name & df$revision == "Before" & df$domain == "Grade", "Score"],0))
     
     #Give no bonus to students who did not turn in a draft
-    if (improvement > 30){
+    if (length(improvement) < 1){
+        improvement = 0
+    } else if (improvement > 30){
         improvement = 0
     }
     
