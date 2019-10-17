@@ -25,7 +25,7 @@ print(ggplot(dist, aes(x = x, y = y)) + geom_line() +
 ```
 
 ```{r feedback_1, fig.show = "hide", message=FALSE, warning=FALSE, echo = FALSE, cache=FALSE}
-if (my_df$word_count < 300){
+if (my_df$word_count < 100){
     print("Feedback: Please try to write more next week.")
 } else {
     print("Feedback: Great job getting to 300 words! Please do the same next week.")
@@ -110,4 +110,4 @@ if (my_df$ave_word_len_z > .3){
 }
 ```
 
-You have completed `r as.character(my_df[,"total_words"][1])` out of 3,000 words for the semester. Your total grade on this assignment is `r my_grades[,date]`%, and cumulatively `r my_grades$finalgrade`% (`r my_grades$finalletter`) for the class so far.
+You have completed `r as.character(my_df[,"total_words"][1])` for the academic year. Your total grade on this assignment is `r my_grades[,date]`%, and cumulatively `r my_grades$finalgrade`% (`r my_grades$finalletter`) for the class so far.
