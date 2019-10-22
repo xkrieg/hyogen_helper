@@ -128,25 +128,35 @@ def add_slack_topic(slack, class_name, userIdNameMap, channel_name):
     topic_list = pd.read_csv('resources/topics.csv')
     question = topic_list.loc[topic_list['name'] == channel_name]['question']
     
-    #Create channel
-    slack.channels.create(channel_name)
+    try:
     
-    #Find channel id
-    channels = slack.channels.list().body['channels']
-    channel_id = [channel['id'] for channel in channels if channel['name'] == channel_name][0]
-    
-    #Invite members
-    for member in members:
+        #Create channel
+        slack.channels.create(channel_name)
+        
+        #Find channel id
+        channels = slack.channels.list().body['channels']
+        channel_id = [channel['id'] for channel in channels if channel['name'] == channel_name][0]
+        
+        #Invite members
+        for member in members:
+            try:
+                slack.channels.invite(channel = channel_id, user = member)
+            except Exception:
+                print(member, "is already in the channel")
+        
+        #Set Purpose
         try:
-            slack.channels.invite(channel = channel_id, user = member)
-        except Exception:
-            print(member, "is already in the channel")
-    
-    #Set purpose and post question
-    slack.channels.set_purpose(channel = channel_id, purpose = question)
-    slack.chat.post_message(channel = channel_name, text = question, username='@xkrieg',
-                            as_user = True)
-    print("Added topic:", channel_name)
+            slack.channels.set_purpose(channel = channel_id, purpose = question)
+        except Exception as e:
+            print("Error: Purpose not set in channel: ", channel_name)
+        
+        #Post Question
+        slack.chat.post_message(channel = channel_name, text = question, username='@xkrieg',
+                                as_user = True)
+        print("Added topic:", channel_name)
+
+    except Exception as e:
+        print("Error: ", e)
     
 def send_mpfi(slack, class_name, userIdNameMap):
     
