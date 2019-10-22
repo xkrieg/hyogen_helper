@@ -43,6 +43,7 @@ def create_files_from_list(drive, class_name, project_name):
     
     #Create name-link dictionary
     name_link = {}
+    failed_shares = {}
     
     for student in student_dict.keys():
         
@@ -77,18 +78,34 @@ def create_files_from_list(drive, class_name, project_name):
                                              'value': student_dict[student],
                                              'role': 'writer'})
             
-            sleep(3)
+            sleep(2)
             #Generate link
             name_link[student] = f['alternateLink']
             
             #Delete file
             print(filename)
             os.remove(filename)
-            sleep(2) #Avoid timeout
+            sleep(3) #Avoid timeout
 
         except Exception as e:
+            failed_shares[student] = f
             print("Failed on %s" % (filename))
             print(e)
+            
+    #Retry failed shares
+    for student in failed_shares.keys():
+        try:
+            #Share file and generate link
+            f = failed_shares[student]
+            permission = f.InsertPermission({'type': 'user',
+                                             'value': student_dict[student],
+                                             'role': 'writer'})
+            sleep(2)
+            name_link[student] = f['alternateLink']
+            sleep(3)
+        except Exception as e:
+            print("Failed for a final time for: ", student_dict[student])
+            
 
     #Confirmation
     print("All files created.")
