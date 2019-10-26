@@ -105,7 +105,6 @@ def create_files_from_list(drive, class_name, project_name):
             sleep(3)
         except Exception as e:
             print("Failed for a final time for: ", student_dict[student])
-            
 
     #Confirmation
     print("All files created.")
