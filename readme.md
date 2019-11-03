@@ -2,7 +2,7 @@
 
 Hyogen Helper is a semi-automatic assistance program for Dr. Alexander Krieg's English writing course. Just as the course is constantly under revision. This program goes through substantial changes in order to accomodate it. Below is a to-do list of the upcoming changes and interations required.
 
-#### To Do List
+### To Do List
 
 **Autmatic Essay Grading**
 - finish grammar checker
