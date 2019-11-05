@@ -3,6 +3,7 @@
 #Import required libraries
 from sklearn.preprocessing import MultiLabelBinarizer, StandardScaler
 from progressbar import ProgressBar
+import numpy as np
 import pandas as pd
 import os
 import gc
