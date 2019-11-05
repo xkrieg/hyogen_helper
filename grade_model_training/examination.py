@@ -32,16 +32,16 @@ if __name__ == "__main__":
                       print_model = True)
                       
     #Compile model
-    model.compile(loss='mse', optimizer = Nadam(lr=.001),
+    model.compile(loss='mse', optimizer = Nadam(lr=.0001),
                   metrics=['mean_squared_error', 'mean_absolute_error', 
-                           'mean_absolute_percentage_error', 'cosine_proximity'])
+                           'mean_absolute_percentage_error'])
     
     #Set early stopping
-    earlystop = EarlyStopping(monitor = 'categorical_accuracy', min_delta = 0.001,
-                              patience = 29, mode = 'auto')
+    earlystop = EarlyStopping(monitor = 'categorical_accuracy', min_delta = 0.01,
+                              patience = 9, mode = 'auto')
     
     #Train model
-    out = model.fit(X, y, batch_size = 200, epochs = 1000, validation_split = .10,
+    out = model.fit(X, y, batch_size = 50, epochs = 1000, validation_split = .10,
                     callbacks = [earlystop])
                     
     #Serialize weights to HDF5

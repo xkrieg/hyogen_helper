@@ -58,29 +58,29 @@ def import_model(X_train, y_train, X_val, y_val, params):
     
     #Compile model
     model.compile(loss = params['losses'], metrics=['mean_squared_error', 
-                 'mean_absolute_error', 'mean_absolute_percentage_error', 
-                 'cosine_proximity'],optimizer = params['optimizer'](lr=lr_normalizer(params['lr'], 
+                 'mean_absolute_error', 'mean_absolute_percentage_error'], 
+                 optimizer = params['optimizer'](lr=lr_normalizer(params['lr'], 
                                                  params['optimizer'])))
-    
+
     #Set early stopping
-    earlystop = EarlyStopping(monitor='categorical_accuracy', min_delta=0.0001,
-                              patience=28, mode='auto')
-    
+    earlystop = EarlyStopping(monitor='categorical_accuracy', min_delta=0.01,
+                              patience=9, mode='auto')
+
     #Train model
     out = model.fit(X_train, y_train, batch_size = params['batch_size'],
                     epochs = params['epochs'], validation_data=[X_val, y_val],
                     verbose=0, callbacks = [earlystop])
-    
+
     return out, model
 
 def run_experiment(time_sec, params, outfile):
     X, y = preprocessing('grade_model_training/data/deep_learn_data.csv')
-    
+
     #Set scan paramters
     scan_object = ta.Scan(X, y, model = import_model, params = params, 
                           dataset_name = "grade_model_training/output/results", 
                           experiment_no = outfile, grid_downsample = .2)
-    
+
     return scan_object
     
 if __name__ == "__main__":
@@ -100,7 +100,7 @@ if __name__ == "__main__":
              'activation': ['relu'],
              'last_activation': [''],
              'losses': ['mse'],
-             'lr': [0.005, 0.01, .05, 0.1],
+             'lr': [.00001, .0001, .0005, .001, .005],
              'optimizer': [Adam, Nadam, RMSprop, SGD],
              'batch_size': [2, 10, 50, 200, 500],
              'epochs': [200]}
