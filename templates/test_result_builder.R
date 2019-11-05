@@ -108,7 +108,7 @@ for (i in as.character(unique(df$user))){
                  grades[grades$user == i,"lastname"])
     
     #Build HTMLs
-    rmarkdown::render(input = "test_report_template.Rmd", output_format = "html_document", 
+    rmarkdown::render(input = "templates/test_report_template.Rmd", output_format = "html_document", 
                       params = list(name = name, date = date, df = df, my_df = my_df,
                                     my_seg_df = my_seg_df, my_grades = my_grades, 
                                     project_name = project_name), output_file = my_filename)

@@ -9,7 +9,7 @@ from functions.slack_functions import mkdir
 #Activate Rscript
 def send_report_request(filename):
     command = "".join(["/usr/local/bin/Rscript ", "--vanilla ",
-                       "report_builder.R ", filename])
+                       "templates/report_builder.R ", filename])
     call(command, shell=True, stdin=None, stdout=None, stderr=None,
          close_fds=True, bufsize=0)
     
@@ -23,7 +23,7 @@ def send_report_request(filename):
 #Written reports
 def test_result_request(class_name, project_name, pre_post):
     command = "".join(["/usr/local/bin/Rscript ", "--vanilla ",
-                       "test_result_builder.R ", class_name, " ", project_name])
+                       "templates/test_result_builder.R ", class_name, " ", project_name])
     call(command, shell=True, stdin=None, stdout=None, stderr=None,
          close_fds=True, bufsize=0)
     

@@ -91,7 +91,7 @@ for (i in 1:nrow(df)){
                  grades[grades$user == my_df$user,"lastname"])
 
     #Build HTMLs
-    rmarkdown::render(input = "report_template.Rmd", output_format = "html_document", 
+    rmarkdown::render(input = "templates/report_template.Rmd", output_format = "html_document", 
                       params = list(name = name, date = date, my_df = my_df,
                                     my_grades = my_grades), output_file = my_filename)
     
