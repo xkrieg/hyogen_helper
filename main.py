@@ -8,12 +8,12 @@ from subprocess import check_call
 import os
 
 #Import local functions
-from slack_functions import doTestAuth, getUserMap, mkdir, send_links, send_mpfi
-from slack_functions import getChannels, upload_reports, add_slack_topic
-from clean_data import standardized_files, user_by_week, get_classes, get_projects, get_topics
-from generate_reports import send_report_request, test_result_request
-from google_functions import initiate, create_files_from_list, download_essays
-from pdf_reader import read_pdfs
+from functions.slack_functions import doTestAuth, getUserMap, mkdir, send_links, send_mpfi
+from functions.slack_functions import getChannels, upload_reports, add_slack_topic
+from functions.clean_data import standardized_files, user_by_week, get_classes, get_projects, get_topics
+from functions.generate_reports import send_report_request, test_result_request
+from functions.google_functions import initiate, create_files_from_list, download_essays
+from functions.pdf_reader import read_pdfs
 
 #Get token and test authorization
 def initialize(class_name):

@@ -4,7 +4,7 @@
 from subprocess import call
 import os
 
-from slack_functions import mkdir
+from functions.slack_functions import mkdir
 
 #Activate Rscript
 def send_report_request(filename):
