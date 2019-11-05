@@ -1,0 +1,15 @@
+<h4><center>`r title`</center></h4>
+```{r plot_display, warning=FALSE, echo = FALSE, fig.height=8, fig.width=11}
+
+#Load libraries
+suppressMessages(library(ggplot2))
+suppressMessages(library(gridExtra))
+
+ggplot(ldf, aes(as.factor(setting), accuracy, fill = train_test)) + 
+            geom_boxplot(varwidth=F, alpha = .6) + ylim(0,1) +
+            scale_fill_manual(values = c("plum", "cyan3")) +
+            stat_summary(fun.y=mean, geom="smooth", aes(group=1)) +
+            stat_summary(fun.y=mean, geom="point", aes(group=1)) + 
+            labs(x="Hyperparameter", y="Accuracy", fill = "Train/Test Data") +
+            facet_grid(. ~ parameter, scales = "free_x")
+```
