@@ -74,11 +74,15 @@ def standardized_files(directory, user_map):
     for i, file in enumerate(file_list):
         with open("/".join([directory,file])) as f:
             data = json.load(f)
-        data = json_normalize(data["messages"])
+        try:
+            data = json_normalize(data["messages"])
         
-        #Select required columns
-        df = data.loc[:, ['user', 'ts', 'text']]
-        df = df.dropna()
+            #Select required columns
+            df = data.loc[:, ['user', 'ts', 'text']]
+            df = df.dropna()
+        
+        except KeyError:
+            df = pd.DataFrame(columns=['user', 'ts', 'text'])
         
         #Check grammar before reformatting sntences
         grammar = language_check.LanguageTool('en-US')
@@ -103,7 +107,10 @@ def standardized_files(directory, user_map):
         df['channel'] = [file[:-len(".json")]] * len(df['date'])
         
         #Remap usernames
-        df['user'] = df.replace({"user": user_map})
+        try:
+            df['user'] = df.replace({"user": user_map})
+        except ValueError:
+            pass
         
         #Reorganize columns
         df = df.loc[:, ['user','date','channel','word_count','ave_word_len',
@@ -113,7 +120,6 @@ def standardized_files(directory, user_map):
         if i == 0:
             main_df = df
         else:
-            pass
             main_df = main_df.append(df)
     
     #Save and Return
