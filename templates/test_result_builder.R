@@ -102,7 +102,7 @@ for (i in as.character(unique(df$user))){
 
     #Text-based data
     project_name <- args[2]
-    my_filename = paste0("output/",args[1],"/",args[2],"/post_reports/", my_df$user[1],"_final_report.html") 
+    my_filename = paste0("../output/",args[1],"/",args[2],"/post_reports/", my_df$user[1],"_final_report.html") 
     date = Sys.Date()
     name = paste(grades[grades$user == i,"firstname"], 
                  grades[grades$user == i,"lastname"])
@@ -114,8 +114,8 @@ for (i in as.character(unique(df$user))){
                                     project_name = project_name), output_file = my_filename)
 
     #Convert to pdf
-    infile <- my_filename
-    outfile <- paste0(substr(my_filename,1,nchar(my_filename)-5),'.pdf')
+    infile <- paste0("output/",args[1],"/",args[2],"/post_reports/", my_df$user[1],"_final_report.html")
+    outfile <- paste0(substr(infile, 1, nchar(my_filename)-5), '.pdf')
     comm<-paste("wkhtmltopdf", infile, outfile, sep = " ")
     system(comm)
     

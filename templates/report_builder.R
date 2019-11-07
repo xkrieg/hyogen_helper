@@ -85,7 +85,7 @@ for (i in 1:nrow(df)){
     my_df <- df[i,]
     my_grades <- grades[grades$user == my_df$user,]
     
-    my_filename = paste0(filename, "/reports/", my_df$user, "_report.html") 
+    my_filename = paste0("../", filename, "/reports/", my_df$user, "_report.html") 
     date = as.character(my_df$date)
     name = paste(grades[grades$user == my_df$user,"firstname"], 
                  grades[grades$user == my_df$user,"lastname"])
@@ -96,8 +96,8 @@ for (i in 1:nrow(df)){
                                     my_grades = my_grades), output_file = my_filename)
     
     #Convert to pdf
-    infile <- my_filename
-    outfile <- paste0(substr(my_filename,1,nchar(my_filename)-5),'.pdf')
+    infile  <- paste0(filename, "/reports/", my_df$user, "_report.html")
+    outfile <- paste0(substr(infile,1,nchar(my_filename)-5),'.pdf')
     comm<-paste("wkhtmltopdf", infile, outfile, sep = " ")
     system(comm)
     
