@@ -26,22 +26,22 @@ if __name__ == "__main__":
     gpu_select(False)
     
     #Get model
-    model = get_model(X[50:, :], y[50:, :], dense_one = 256, 
-                      dense_two = 256, dense_three = 256, activation = 'relu', 
+    model = get_model(X[50:, :], y[50:, :], dense_one = 512, 
+                      dense_two = 256, dense_three = 1024, activation = 'relu', 
                       last_activation = 'sigmoid', initialize = False, 
                       print_model = True)
                       
     #Compile model
-    model.compile(loss='mse', optimizer = Nadam(lr=.0001),
+    model.compile(loss='mse', optimizer = SGD(lr = .005, clipnorm = 1.),
                   metrics=['mean_squared_error', 'mean_absolute_error', 
                            'mean_absolute_percentage_error'])
     
     #Set early stopping
-    earlystop = EarlyStopping(monitor = 'categorical_accuracy', min_delta = 0.01,
+    earlystop = EarlyStopping(monitor = 'mean_squared_error', min_delta = 0.001,
                               patience = 9, mode = 'auto')
     
     #Train model
-    out = model.fit(X, y, batch_size = 50, epochs = 1000, validation_split = .10,
+    out = model.fit(X, y, batch_size = 10, epochs = 1000, validation_split = .10,
                     callbacks = [earlystop])
                     
     #Serialize weights to HDF5

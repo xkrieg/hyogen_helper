@@ -1,5 +1,16 @@
 # -*- coding: utf-8 -*-
 
+#Suppress Tensorflow information
+import os
+import logging
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # FATAL
+logging.getLogger('tensorflow').setLevel(logging.FATAL)
+logging.getLogger('numpy').setLevel(logging.FATAL)
+
+import tensorflow as tf
+tf.logging.set_verbosity(tf.logging.FATAL)
+
 #Set seed
 seed_no = 3223
 from numpy.random import seed
@@ -11,7 +22,6 @@ set_random_seed(seed_no)
 import numpy as np
 import pandas as pd
 import talos as ta
-import tensorflow as tf
 from talos.utils.gpu_utils import multi_gpu
 from talos.model.normalizers import lr_normalizer
 from sklearn.preprocessing import StandardScaler
@@ -19,7 +29,7 @@ from tensorflow import test
 from tensorflow.python.client import device_lib
 from keras.optimizers import Adam, Nadam, RMSprop, SGD
 from keras.callbacks import EarlyStopping
-import os
+from subprocess import call
 
 #Local libraries
 from model.model_archt import get_model
@@ -63,7 +73,7 @@ def import_model(X_train, y_train, X_val, y_val, params):
                                                  params['optimizer'])))
 
     #Set early stopping
-    earlystop = EarlyStopping(monitor='categorical_accuracy', min_delta=0.01,
+    earlystop = EarlyStopping(monitor='categorical_accuracy', min_delta=0.1,
                               patience=9, mode='auto')
 
     #Train model
@@ -79,17 +89,13 @@ def run_experiment(time_sec, params, outfile):
     #Set scan paramters
     scan_object = ta.Scan(X, y, model = import_model, params = params, 
                           dataset_name = "grade_model_training/output/results", 
-                          experiment_no = outfile, grid_downsample = .2)
+                          experiment_no = outfile, grid_downsample = .5)
 
     return scan_object
     
 if __name__ == "__main__":
     
-    #Suppress Tensorflow information
-    tf.logging.set_verbosity(tf.logging.ERROR)
-    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-    
-    for seconds in [3]:#, 45, 60]:
+    for seconds in [7]:#, 45, 60]:
     
         #print("".join(["Number of Seconds: ", str(seconds)]))
     
@@ -100,13 +106,13 @@ if __name__ == "__main__":
              'activation': ['relu'],
              'last_activation': [''],
              'losses': ['mse'],
-             'lr': [.00001, .0001, .0005, .001, .005],
+             'lr': [.0001, .0005, .001, .005],
              'optimizer': [Adam, Nadam, RMSprop, SGD],
-             'batch_size': [2, 10, 50, 200, 500],
-             'epochs': [200]}
+             'batch_size': [10, 50, 200],
+             'epochs': [500]}
     
         #Force Use GPU?
-        gpu_select(False)
+        gpu_select(True)
     
         #Name experiment
         expname = "_".join(["layer", str(seconds)])
@@ -116,9 +122,9 @@ if __name__ == "__main__":
         r = ta.Reporting(scanned)
         
         #Create graph
-        call(['Rscript', 'data_helper/plot_gen.R', expname])
+        call(['Rscript', 'grade_model_training/datahelpers/plot_gen.R', expname])
         
         #Display cursory results
-        print("The highest model achieved an accuracy of %s \n" % r.high('val_categorical_accuracy'))
-        print("The best identified parameters are as follows:")
-        print(r.data.ix[r.rounds2high('val_categorical_accuracy')])
+        # print("The highest model achieved an accuracy of %s \n" % r.high('val_categorical_accuracy'))
+        # print("The best identified parameters are as follows:")
+        # print(r.data.ix[r.rounds2high('val_categorical_accuracy')])
