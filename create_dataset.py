@@ -66,9 +66,10 @@ def check_essay(essay):
     return(output)
 
 #Generate list of essays
-possible_suffix = ['superpower_essay.csv','100_birthday_essay.csv','analysis_essay.csv',
+possible_suffix = ['analysis_essay.csv',
                    'argumentative_essay.csv','comparative_essay','process_essay.csv',
                    'descriptive_essay.csv','narrative_essay.csv','summary_essay.csv']
+                   #'superpower_essay.csv','100_birthday_essay.csv',
 
 list_of_essay_files = []
 for suffix in possible_suffix:
@@ -112,5 +113,10 @@ df.columns=['grade', 'class', 'assignment', 'prepost', 'paragraph_count',
             'berger_parker', 'percent_active', 'ave_sent_length', 
             'sd_sent_length', 'percent_short', 'percent_long',
             'trans_count', 'trans_diversity']
+
+#Remove 0s and 100s
+df = df.drop(df['grade' < 50].index)
+df = df.drop(df['grade' > 98].index)
+
 df.to_csv("deep_learn_data.csv", index = False)
 print(df)
