@@ -60,12 +60,13 @@ grades = read.csv(grade_file, header = T)
 grades[,args[2]] <-rep(0,nrow(grades))
 
 for(name in unique(df$user)){
+    print(name)
     
     improvement = abs(round(df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"]-
                         df[df$user == name & df$revision == "Before" & df$domain == "Grade", "Score"],0))
     
     #Give no bonus to students who did not turn in a draft
-    if (length(improvement) < 1){
+    if (!is.numeric(improvement)){
         improvement = 0
     } else if (improvement > 30){
         improvement = 0
@@ -115,7 +116,7 @@ for (i in as.character(unique(df$user))){
 
     #Convert to pdf
     infile <- paste0("output/",args[1],"/",args[2],"/post_reports/", my_df$user[1],"_final_report.html")
-    outfile <- paste0(substr(infile, 1, nchar(my_filename)-5), '.pdf')
+    outfile <- paste0(substr(infile, 1, nchar(my_filename)-8), '.pdf')
     comm<-paste("wkhtmltopdf", infile, outfile, sep = " ")
     system(comm)
     
