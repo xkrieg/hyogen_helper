@@ -5,11 +5,11 @@
 suppressMessages(library(ggplot2))
 suppressMessages(library(gridExtra))
 
-ggplot(ldf, aes(as.factor(setting), accuracy, fill = train_test)) + 
+ggplot(ldf, aes(as.factor(setting), error, fill = train_test)) + 
             geom_boxplot(varwidth=F, alpha = .6) + ylim(0,1) +
-            scale_fill_manual(values = c("plum", "cyan3")) +
+            #scale_fill_manual(values = c("plum", "cyan3")) +
             stat_summary(fun.y=mean, geom="smooth", aes(group=1)) +
             stat_summary(fun.y=mean, geom="point", aes(group=1)) + 
-            labs(x="Hyperparameter", y="Accuracy", fill = "Train/Test Data") +
+            labs(x="Hyperparameter", y="Error", fill = "Train/Test Data") +
             facet_grid(. ~ parameter, scales = "free_x")
 ```

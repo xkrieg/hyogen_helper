@@ -3,17 +3,19 @@ suppressMessages(library(tidyr))
 suppressMessages(library(dplyr))
 
 #Accept arguments from python script
-args = paste0("output/psynary_", commandArgs(trailingOnly=TRUE), ".csv")
+args = paste0("grade_model_training/output/results_layer_7.csv")#, commandArgs(trailingOnly=TRUE), ".csv")
 #args = paste0("output/psynary_", "depmedwin2_4", ".csv") #For testing
 
 #Load data
 df <- read.csv(args, header = T, stringsAsFactors = F)
 
 #Reformat to long data
-ldf <- df[,c("categorical_accuracy", "val_categorical_accuracy", "conv_neuron",
-             "dense_neuron","lr","optimizer","batch_size")]
-ldf <- gather(ldf, key = train_test, value = accuracy, -conv_neuron, -dense_neuron,
-             -lr, -optimizer, -batch_size)
+ldf <- df[,c("mean_squared_error", "val_mean_squared_error", "mean_absolute_error",
+             "val_mean_absolute_error", "mean_absolute_percentage_error", 
+             "val_mean_absolute_percentage_error", "dense_one", "dense_two",
+             "dense_three", "lr", "optimizer", "batch_size")]
+ldf <- gather(ldf, key = train_test, value = error, -dense_one, -dense_two,
+              -dense_three, -lr, -optimizer, -batch_size)
 
 #Recode train/test
 ldf$train_test <- as.factor(recode(ldf$train_test,
@@ -28,12 +30,13 @@ ldf$optimizer <- recode(ldf$optimizer, "<class 'keras.optimizers.Nadam'>" = "Nad
                                        "<class 'keras.optimizers.SGD'>" = "SGD")
 
 #Finish long format
-ldf <- gather(ldf, key = parameter, value = setting, -train_test, -accuracy)
+ldf <- gather(ldf, key = parameter, value = setting, -train_test, -error)
 
 #Rename parameters
 ldf$parameter <- recode(ldf$parameter, "batch_size" = "Batch Size",
-                                       "conv_neuron" = "Convolutional Neuron",
-                                       "dense_neuron" = "Dense Neuron",
+                                       "dense_one" = "Dense Neuron 1",
+                                       "dense_two" = "Dense Neuron 2",
+                                       "dense_three" = "Dense Neuron 3",
                                        "lr" = "Learning Rate",
                                        "optimizer" = "Optimizer")
 
@@ -47,9 +50,9 @@ title <- sub("^([^.]*).*", "\\1", basename(args))
 
 #Render HTML version of report
 infile <- paste0(sub("^([^.]*).*", "\\1", args), ".html")
-rmarkdown::render(input = 'data_helper/result_template.Rmd', 
+rmarkdown::render(input = 'grade_model_training/datahelpers/result_template.Rmd', 
                   output_format = "html_document", 
-                  output_file = paste0("../", infile),
+                  output_file = infile,
                   params = c(ldf = ldf, title = title),
                   quiet = T)
 

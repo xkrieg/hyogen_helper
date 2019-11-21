@@ -16,7 +16,7 @@ def preprocessing(file):
     df = df.reindex(np.random.RandomState(seed=3223).permutation(df.index))
 
     #Make X Window Stack
-    X = df.values[:,2:]
+    X = df.values[:,4:]
     X = StandardScaler().fit_transform(X)
     print(X.shape)
     
