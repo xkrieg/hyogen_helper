@@ -75,8 +75,15 @@ for(name in unique(df$user)){
         improvement = 0
     }
     
-    grades[grades$user == name, args[2]] <- 
-        df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"] + improvement
+    if (df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"] == 0 &
+        df[df$user == name & df$revision == "Before" & df$domain == "Grade", "Score"] != 0){
+        grades[grades$user == name, args[2]] <- 
+            df[df$user == name & df$revision == "Before" & df$domain == "Grade", "Score"]
+    } else{
+        grades[grades$user == name, args[2]] <- 
+            df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"] + improvement
+    }
+    
     grades[grades$user == name, "denominator"] <- grades[grades$user == name, "denominator"] + 100
     grades[grades$user == name, "numerator"] <- grades[grades$user == name, "numerator"] + 
                                                 grades[grades$user == name, args[2]]

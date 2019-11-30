@@ -6,7 +6,6 @@ Hyogen Helper is a semi-automatic assistance program for Dr. Alexander Krieg's E
 
 **For Next Semester**
 - Fix name on reports (no names are currently added)
-- Fix error where no post report means no grade
 - Make it so "post_report" or "pre_report" are automatically populated
 
 **Autmatic Essay Grading**
