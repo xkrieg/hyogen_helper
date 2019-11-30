@@ -63,12 +63,15 @@ for(name in unique(df$user)){
     print(name)
     
     improvement = abs(round(df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"]-
-                        df[df$user == name & df$revision == "Before" & df$domain == "Grade", "Score"],0))
+                                df[df$user == name & df$revision == "Before" & df$domain == "Grade", "Score"],0))
     
     #Give no bonus to students who did not turn in a draft
-    if (!is.numeric(improvement)){
-        improvement = 0
-    } else if (improvement > 30){
+    if (!is.null(improvement) & length(improvement) > 0 & improvement < 30){
+        
+        improvement = abs(round(df[df$user == name & df$revision == "After" & df$domain == "Grade", "Score"]-
+                                    df[df$user == name & df$revision == "Before" & df$domain == "Grade", "Score"],0))
+    
+    } else {
         improvement = 0
     }
     
